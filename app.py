@@ -238,35 +238,18 @@ def reorganizar_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     primeira_linha = df.iloc[0]
 
     if eh_cabecalho(primeira_linha):
-        cabecalho = primeira_linha.tolist()
-        df_dados = df.iloc[1:].copy().reset_index(drop=True)
+        df = df.iloc[1:].reset_index(drop=True)
 
-        mapeamento = mapear_colunas_do_cabecalho(cabecalho)
+    df_dados = df.copy()
 
-        if len(mapeamento) < 7:
-            mapeamento_conteudo = identificar_colunas_por_conteudo(df_dados)
-            for coluna in COLUNAS_PADRAO:
-                if coluna not in mapeamento:
-                    mapeamento[coluna] = mapeamento_conteudo[coluna]
+    mapeamento = identificar_colunas_por_conteudo(df_dados)
 
-        df_reorganizado = pd.DataFrame()
+    df_reorganizado = pd.DataFrame()
 
-        for coluna_padrao in COLUNAS_PADRAO:
-            df_reorganizado[coluna_padrao] = df_dados.iloc[:, mapeamento[coluna_padrao]]
+    for coluna_padrao in COLUNAS_PADRAO:
+        df_reorganizado[coluna_padrao] = df_dados.iloc[:, mapeamento[coluna_padrao]]
 
-        return df_reorganizado
-
-    else:
-        df_dados = df.copy().reset_index(drop=True)
-
-        mapeamento = identificar_colunas_por_conteudo(df_dados)
-
-        df_reorganizado = pd.DataFrame()
-
-        for coluna_padrao in COLUNAS_PADRAO:
-            df_reorganizado[coluna_padrao] = df_dados.iloc[:, mapeamento[coluna_padrao]]
-
-        return df_reorganizado
+    return df_reorganizado
 
 
 def tratar_dados(df: pd.DataFrame) -> pd.DataFrame:
@@ -299,12 +282,10 @@ def tratar_dados(df: pd.DataFrame) -> pd.DataFrame:
 def ler_arquivo(uploaded_file):
     nome = uploaded_file.filename.lower()
 
-    if nome.endswith(".csv"):
-        return pd.read_csv(uploaded_file, header=None, dtype=str)
-    if nome.endswith(".xls") or nome.endswith(".xlsx"):
+    if nome.endswith(".xlsx"):
         return pd.read_excel(uploaded_file, header=None, dtype=str)
 
-    raise ValueError("Formato inválido. Envie CSV, XLS ou XLSX.")
+    raise ValueError("Formato inválido. Envie apenas arquivo XLSX.")
 
 
 @app.route("/", methods=["GET"])
@@ -351,8 +332,7 @@ def processar():
             output,
             sep="\t",
             index=False,
-            quoting=csv.QUOTE_ALL,
-            encoding="utf-8"
+            quoting=csv.QUOTE_ALL
         )
 
         mem = io.BytesIO()
