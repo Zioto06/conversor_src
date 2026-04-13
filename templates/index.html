@@ -11,6 +11,7 @@
       margin: 0;
       padding: 40px 20px;
     }
+
     .container {
       max-width: 600px;
       margin: 0 auto;
@@ -19,20 +20,24 @@
       border-radius: 14px;
       box-shadow: 0 4px 18px rgba(0,0,0,0.08);
     }
+
     h1 {
       margin-top: 0;
       color: #222;
     }
+
     p {
       color: #555;
       line-height: 1.5;
     }
+
     label {
       display: block;
       margin-top: 18px;
       margin-bottom: 8px;
       font-weight: bold;
     }
+
     input[type="file"],
     input[type="text"] {
       width: 100%;
@@ -41,6 +46,7 @@
       border-radius: 8px;
       box-sizing: border-box;
     }
+
     button {
       margin-top: 22px;
       width: 100%;
@@ -52,9 +58,11 @@
       border-radius: 8px;
       cursor: pointer;
     }
+
     button:hover {
       background: #157347;
     }
+
     .alert {
       background: #ffe6e6;
       color: #a40000;
@@ -62,17 +70,39 @@
       border-radius: 8px;
       margin-bottom: 16px;
     }
+
     .obs {
       font-size: 14px;
       color: #666;
       margin-top: 8px;
     }
+
+    .footer {
+      margin-top: 30px;
+      text-align: center;
+      font-size: 14px;
+      color: #777;
+    }
+
+    .footer a {
+      color: #0a66c2;
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
+
 <body>
   <div class="container">
+
     <h1>Conversor de Certificados</h1>
-    <p>Envie um arquivo CSV, XLS ou XLSX para reorganizar e formatar os dados automaticamente.</p>
+
+    <p>
+      Envie um arquivo XLSX para formatar os dados automaticamente.
+    </p>
 
     {% with messages = get_flashed_messages() %}
       {% if messages %}
@@ -83,18 +113,30 @@
     {% endwith %}
 
     <form action="/processar" method="post" enctype="multipart/form-data">
+
       <label for="arquivo">Arquivo</label>
-      <input type="file" name="arquivo" id="arquivo" accept=".csv,.xls,.xlsx" required>
+      <input type="file" name="arquivo" id="arquivo" accept=".xlsx" required>
 
       <label for="linhas_remover">Linhas a remover</label>
       <input type="text" name="linhas_remover" id="linhas_remover" placeholder="Ex: 2,4,5">
 
       <div class="obs">
-        Observação: ao informar uma linha, o sistema remove a linha anterior, conforme a lógica do seu código.
+        Observação: caso não tenha linhas a se retirar, deixe em branco
       </div>
 
-      <button type="submit">Enviar e baixar arquivo formatado</button>
+      <button type="submit">
+        Enviar e baixar arquivo formatado
+      </button>
+
     </form>
+
+    <div class="footer">
+      Desenvolvido por: Luis Philipe Zioto de Barros<br>
+      <a href="https://www.linkedin.com/in/luis-zioto" target="_blank">
+        https://www.linkedin.com/in/luis-zioto
+      </a>
+    </div>
+
   </div>
 </body>
 </html>
