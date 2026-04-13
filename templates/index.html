@@ -13,7 +13,7 @@
     }
 
     .container {
-      max-width: 600px;
+      max-width: 700px;
       margin: 0 auto;
       background: white;
       padding: 30px;
@@ -77,6 +77,33 @@
       margin-top: 8px;
     }
 
+    .instrucoes {
+      background: #f8f9fa;
+      border: 1px solid #e3e6ea;
+      border-radius: 10px;
+      padding: 18px;
+      margin: 20px 0 25px 0;
+    }
+
+    .instrucoes h2 {
+      margin-top: 0;
+      font-size: 20px;
+      color: #222;
+    }
+
+    .instrucoes p {
+      margin-bottom: 10px;
+    }
+
+    .imagem-exemplo {
+      width: 100%;
+      max-width: 620px;
+      display: block;
+      margin: 15px auto 10px auto;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+
     .footer {
       margin-top: 30px;
       text-align: center;
@@ -97,12 +124,28 @@
 
 <body>
   <div class="container">
-
     <h1>Conversor de Certificados</h1>
 
     <p>
       Envie um arquivo XLSX para formatar os dados automaticamente.
     </p>
+
+    <div class="instrucoes">
+      <h2>Instruções da planilha</h2>
+      <p>
+        O arquivo deve conter 7 colunas: Nome completo, Data de nascimento, CPF,
+        E-mail, CH, Data Início e Data Término.
+      </p>
+      <p>
+        A planilha pode ser enviada com ou sem cabeçalho.
+      </p>
+
+      <img
+        src="{{ url_for('static', filename='exemplo-planilha.png') }}"
+        alt="Exemplo de planilha"
+        class="imagem-exemplo"
+      >
+    </div>
 
     {% with messages = get_flashed_messages() %}
       {% if messages %}
@@ -113,7 +156,6 @@
     {% endwith %}
 
     <form action="/processar" method="post" enctype="multipart/form-data">
-
       <label for="arquivo">Arquivo</label>
       <input type="file" name="arquivo" id="arquivo" accept=".xlsx" required>
 
@@ -127,7 +169,6 @@
       <button type="submit">
         Enviar e baixar arquivo formatado
       </button>
-
     </form>
 
     <div class="footer">
@@ -136,7 +177,6 @@
         https://www.linkedin.com/in/luis-zioto
       </a>
     </div>
-
   </div>
 </body>
 </html>
