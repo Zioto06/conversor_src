@@ -239,13 +239,10 @@ def reorganizar_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
     if eh_cabecalho(primeira_linha):
         cabecalho = primeira_linha.tolist()
-
-        # remove a linha do cabeçalho antes do processamento
         df_dados = df.iloc[1:].copy().reset_index(drop=True)
 
         mapeamento = mapear_colunas_do_cabecalho(cabecalho)
 
-        # se não conseguir mapear tudo pelo cabeçalho, completa por conteúdo
         if len(mapeamento) < 7:
             mapeamento_conteudo = identificar_colunas_por_conteudo(df_dados)
             for coluna in COLUNAS_PADRAO:
@@ -336,11 +333,22 @@ def processar():
                 if i.strip().isdigit()
             ]
 
-            indices_reais = [
-                i - 2
-                for i in linhas_digitadas
-                if i - 2 >= 0
-            ]
+            tem_cabecalho = False
+            if not df.empty:
+                tem_cabecalho = eh_cabecalho(df.iloc[0])
+
+            if tem_cabecalho:
+                indices_reais = [
+                    i - 1
+                    for i in linhas_digitadas
+                    if i - 1 >= 0
+                ]
+            else:
+                indices_reais = [
+                    i - 2
+                    for i in linhas_digitadas
+                    if i - 2 >= 0
+                ]
 
             if indices_reais:
                 df = df.drop(index=indices_reais).reset_index(drop=True)
